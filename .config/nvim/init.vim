@@ -13,6 +13,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'nvim-tree/nvim-web-devicons'
 	Plug 'akinsho/bufferline.nvim'
 	Plug 'dhananjaylatkar/cscope_maps.nvim'
+	Plug 'ludovicchabant/vim-gutentags'
+
 	Plug 'lewis6991/gitsigns.nvim'
 	Plug 'tmsvg/pear-tree'
 	Plug 'dstein64/vim-startuptime'
