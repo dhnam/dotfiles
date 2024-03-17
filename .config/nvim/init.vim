@@ -53,7 +53,6 @@ call plug#end()
 
 let mapleader=" "
 source ~/.config/nvim/plug-config/treesitter.lua
-source ~/.config/nvim/plug-config/whichkey.lua
 source ~/.config/nvim/plug-config/vscode.lua
 source ~/.config/nvim/plug-config/bufferline.lua
 source ~/.config/nvim/plug-config/scrollbar.lua
@@ -69,6 +68,8 @@ source ~/.config/nvim/plug-config/gitsigns.lua
 source ~/.config/nvim/plug-config/telescope.lua
 source ~/.config/nvim/plug-config/project.lua
 source ~/.config/nvim/plug-config/autopair.lua
+source ~/.config/nvim/plug-config/lspconfig.lua
+source ~/.config/nvim/plug-config/whichkey.lua
 
 set ts=4
 set shiftwidth=4
