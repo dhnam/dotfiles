@@ -22,7 +22,7 @@ call plug#begin('~/.vim/plugged')
 	"Git signs
 	Plug 'lewis6991/gitsigns.nvim'
 	"{}()[] pair
-	Plug 'tmsvg/pear-tree'
+	Plug 'windwp/nvim-autopairs'
 	"Startup time
 	Plug 'dstein64/vim-startuptime'
 
@@ -45,7 +45,7 @@ call plug#begin('~/.vim/plugged')
 
 	"Fuzzy search
 	Plug 'nvim-lua/plenary.nvim'
-	Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.6' }
+	Plug 'nvim-telescope/telescope.nvim', {'frozen' : 1, 'tag': '0.1.6' }
 
 	"Project
 	Plug 'ahmedkhalf/project.nvim'
@@ -68,6 +68,7 @@ source ~/.config/nvim/plug-config/dressing.lua
 source ~/.config/nvim/plug-config/gitsigns.lua
 source ~/.config/nvim/plug-config/telescope.lua
 source ~/.config/nvim/plug-config/project.lua
+source ~/.config/nvim/plug-config/autopair.lua
 
 set ts=4
 set shiftwidth=4
