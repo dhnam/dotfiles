@@ -8,7 +8,7 @@ call plug#begin('~/.vim/plugged')
 	"key preview
 	Plug 'folke/which-key.nvim'
 	"Scrollbar
-	Plug 'petertriho/nvim-scrollbar'
+	Plug 'dstein64/nvim-scrollview'
 	"Bottom line (replace airline)
 	Plug 'nvim-lualine/lualine.nvim'
 	"Theme
@@ -19,8 +19,6 @@ call plug#begin('~/.vim/plugged')
 	"Cscope (<C-\>)
 	Plug 'dhananjaylatkar/cscope_maps.nvim'
 	Plug 'ludovicchabant/vim-gutentags'
-	"Git signs
-	Plug 'lewis6991/gitsigns.nvim'
 	"{}()[] pair
 	Plug 'windwp/nvim-autopairs'
 	"Startup time
@@ -55,7 +53,6 @@ let mapleader=" "
 source ~/.config/nvim/plug-config/treesitter.lua
 source ~/.config/nvim/plug-config/vscode.lua
 source ~/.config/nvim/plug-config/bufferline.lua
-source ~/.config/nvim/plug-config/scrollbar.lua
 source ~/.config/nvim/plug-config/lualine.lua
 source ~/.config/nvim/plug-config/cscope.lua
 source ~/.config/nvim/plug-config/tagbar.vim
@@ -64,12 +61,12 @@ source ~/.config/nvim/plug-config/mason-lspconfig.lua
 source ~/.config/nvim/plug-config/nvimtree.lua
 source ~/.config/nvim/plug-config/cmp.lua
 source ~/.config/nvim/plug-config/dressing.lua
-source ~/.config/nvim/plug-config/gitsigns.lua
 source ~/.config/nvim/plug-config/telescope.lua
 source ~/.config/nvim/plug-config/project.lua
 source ~/.config/nvim/plug-config/autopair.lua
 source ~/.config/nvim/plug-config/lspconfig.lua
 source ~/.config/nvim/plug-config/whichkey.lua
+source ~/.config/nvim/plug-config/scrollbar.lua
 
 set ts=4
 set shiftwidth=4
