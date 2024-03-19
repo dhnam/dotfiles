@@ -5,6 +5,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'preservim/tagbar'
 	"treesitter - highlighter
 	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+	"Context viewer
+	Plug 'nvim-treesitter/nvim-treesitter-context'
 	"key preview
 	Plug 'folke/which-key.nvim'
 	"Scrollbar
