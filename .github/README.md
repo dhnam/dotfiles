@@ -17,3 +17,12 @@ zsh / oh-my-zsh / p10k / nvim / vim-plug
 After install those, pull from this repo using `yadm pull`, and head to vi (neovim), execute `:PlugInstall` to install all of those plugins.
 
 After that, download some LSP in need using `:Mason`.
+
+# Font
+
+Every Nerd-patched font (/w Nerd Font 3.0+) works, but I used D2CodingNerdFontMono-Regular.
+
+Font can be found [here](https://github.com/dhnam/d2coding-nerd-font). (Not official, but used patcher.)
+
+Note that [Official D2Coding nerd font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/D2Coding) is ligature vertion, so it might broke `<Key>=test` into `<Key≥test`. Use at own risk.
+
