@@ -17,3 +17,8 @@ require('which-key').register({
 		T = {"<cmd>Telescope<CR>", "See all telescope"}
 	}
 }, { prefix = "<leader>" })
+
+require('which-key').register({
+	["<C-\\><C-n>"] = { "Normal mode" },
+	["<C-\\><C-o>"] = { "Normal mode for a operation"}
+}, { mode = "t" })
