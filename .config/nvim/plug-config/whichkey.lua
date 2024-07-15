@@ -4,21 +4,19 @@ require('which-key').setup({
 	}
 })
 
-require('which-key').register({
+require('which-key').add({
 	-- Telescope
-	t = {
-		name = "Telescope",
-		r = {"<cmd>Telescope lsp_references<CR>", "Find symbol reference under cursor"},
-		d = {"<cmd>Telescope lsp_definitions<CR>", "Find global definition under cursor"},
-		i = {"<cmd>Telescope lsp_implementations<CR>", "Find implementation under cursor"},
-		t = {"<cmd>Telescope lsp_type_definitions<CR>", "Find type definition under cursor"},
-		S = {"<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", "Search symbols"},
-		G = {"<cmd>Telescope live_grep<CR>", "Live grep"},
-		T = {"<cmd>Telescope<CR>", "See all telescope"}
-	}
-}, { prefix = "<leader>" })
+    { "<leader>t", group = "Telescope" },
+    { "<leader>tG", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
+    { "<leader>tS", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", desc = "Search symbols" },
+    { "<leader>tT", "<cmd>Telescope<CR>", desc = "See all telescope" },
+    { "<leader>td", "<cmd>Telescope lsp_definitions<CR>", desc = "Find global definition under cursor" },
+    { "<leader>ti", "<cmd>Telescope lsp_implementations<CR>", desc = "Find implementation under cursor" },
+    { "<leader>tr", "<cmd>Telescope lsp_references<CR>", desc = "Find symbol reference under cursor" },
+    { "<leader>tt", "<cmd>Telescope lsp_type_definitions<CR>", desc = "Find type definition under cursor" },
+})
 
-require('which-key').register({
-	["<C-\\><C-n>"] = { "Normal mode" },
-	["<C-\\><C-o>"] = { "Normal mode for a operation"}
-}, { mode = "t" })
+require('which-key').add({
+    { "<C-\\><C-n>", desc = "Normal mode", mode = "t" },
+    { "<C-\\><C-o>", desc = "Normal mode for a operation", mode = "t" },
+  })

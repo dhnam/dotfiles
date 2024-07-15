@@ -7,6 +7,8 @@ call plug#begin('~/.vim/plugged')
 	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 	"Context viewer
 	Plug 'nvim-treesitter/nvim-treesitter-context'
+	"Icon for whichkey
+	Plug 'echasnovski/mini.icons'
 	"key preview
 	Plug 'folke/which-key.nvim'
 	"Scrollbar
@@ -45,7 +47,7 @@ call plug#begin('~/.vim/plugged')
 
 	"Fuzzy search
 	Plug 'nvim-lua/plenary.nvim'
-	Plug 'nvim-telescope/telescope.nvim', {'frozen' : 1, 'tag': '0.1.6' }
+	Plug 'nvim-telescope/telescope.nvim', {'frozen' : 1, 'tag': '0.1.8' }
 
 	"Project
 	Plug 'ahmedkhalf/project.nvim'
