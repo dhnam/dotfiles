@@ -114,3 +114,9 @@ export SDKMAN_DIR="/home/legendust/.sdkman"
 [[ -s "/home/legendust/.sdkman/bin/sdkman-init.sh" ]] && source "/home/legendust/.sdkman/bin/sdkman-init.sh"
 # Install Ruby Gems to ~/gems
 export GEM_HOME="$HOME/gems"
+
+# pyenv
+export PATH="$HOME/.pyenv/bin:$PATH"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
