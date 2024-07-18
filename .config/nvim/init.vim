@@ -47,12 +47,24 @@ call plug#begin('~/.vim/plugged')
 
 	"Fuzzy search
 	Plug 'nvim-lua/plenary.nvim'
-	Plug 'nvim-telescope/telescope.nvim', {'frozen' : 1, 'tag': '0.1.8' }
+	Plug 'nvim-telescope/telescope.nvim', { 'frozen': 1, 'tag': '0.1.8' }
 
 	"Project
 	Plug 'ahmedkhalf/project.nvim'
 call plug#end()
 
+    let g:clipboard = {
+                \   'name': 'WslClipboard',
+                \   'copy': {
+                \      '+': 'clip.exe',
+                \      '*': 'clip.exe',
+                \    },
+                \   'paste': {
+                \      '+': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+                \      '*': 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+                \   },
+                \   'cache_enabled': 0,
+                \ }
 let mapleader=" "
 source ~/.config/nvim/plug-config/treesitter.lua
 source ~/.config/nvim/plug-config/vscode.lua
