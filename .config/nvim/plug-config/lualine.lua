@@ -1,7 +1,15 @@
+local custom_auto = require'lualine.themes.auto'
+local vscode_colors = require'vscode.colors'.get_colors()
+custom_auto.normal.b.bg = vscode_colors.vscTabCurrent
+custom_auto.insert.b.bg = vscode_colors.vscTabCurrent
+custom_auto.visual.b.bg = vscode_colors.vscTabCurrent
+custom_auto.replace.b.bg = vscode_colors.vscTabCurrent
+custom_auto.command.b.bg = vscode_colors.vscTabCurrent
+custom_auto.inactive.b.bg = vscode_colors.vscTabCurrent
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    theme = custom_auto,
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {
