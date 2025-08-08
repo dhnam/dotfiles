@@ -1,0 +1,47 @@
+#!/bin/sh
+set -e
+
+# 필수 패키지 설치
+sudo apt update
+sudo apt install -y git curl zsh
+
+# Neovim 설치
+if ! command -v nvim >/dev/null 2>&1; then
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
+  chmod u+x nvim-linux-x86_64.appimage
+  sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
+
+  # vi, vim 모두 nvim으로 심볼릭 링크 생성
+  sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vi
+  sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vim
+fi
+
+# oh-my-zsh 설치 (설치되어 있으면 스킵)
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# powerlevel10k 설치
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+fi
+
+# vim-plug 설치 (vim용)
+if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
+# pyenv 설치 (설치되어 있으면 스킵)
+if [ ! -d "$HOME/.pyenv" ]; then
+  curl -fsSL https://pyenv.run | bash
+fi
+
+# zsh를 기본 쉘로 설정 (현재 쉘이 zsh가 아니면 변경)
+if [ "$SHELL" != "$(which zsh)" ]; then
+  echo "Changing default shell to zsh..."
+  chsh -s "$(which zsh)" || echo "Failed to change shell. Please change manually."
+fi
+
+echo "Bootstrap script completed."
