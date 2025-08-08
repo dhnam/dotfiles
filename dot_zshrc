@@ -11,6 +11,8 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="/home/legendust/.oh-my-zsh"
 
+export PATH="$PATH:/snap/bin"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -79,7 +81,7 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
-cd ~
+# cd ~
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -120,3 +122,4 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+# test
