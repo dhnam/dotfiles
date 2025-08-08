@@ -6,7 +6,7 @@ Note that some keybinds (telescope for example) is quite arbitary.
 
 Is subject to change.
 
-Managed with `yadm`.
+Managed with ~~`yadm`~~ `chezmoi`.
 
 # Prerequirement
 
