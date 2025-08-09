@@ -2,6 +2,7 @@
 format = """
 [](color_bg)\
 $os\
+$shell\
 [╱ ](fg:color_fg bg:color_bg)\
 $directory\
 ([╱ ](fg:color_fg bg:color_bg)$git_branch)\
@@ -12,6 +13,7 @@ $fill\
 [ ](bg:color_bg)\
 ($status[╱ ](fg:color_fg bg:color_bg))\
 ($cmd_duration[╱ ](fg:color_fg bg:color_bg))\
+($jobs[╱ ](fg:color_fg bg:color_bg))\
 ($direnv[╱ ](fg:color_fg bg:color_bg))\
 ($package[╱ ](fg:color_fg bg:color_bg))\
 ($c[╱ ](fg:color_fg bg:color_bg))\
@@ -39,6 +41,28 @@ palette = 'dark'
 [palettes.dark]
 color_bg = '236'
 color_fg = '244'
+
+[jobs]
+symbol = ''
+style = 'fg:37 bg:color_bg'
+format = '[$symbol( $number) ]($style)'
+
+[shell]
+disabled = false
+format = '[$indicator ]($style)'
+style = 'fg:255 bg:color_bg'
+bash_indicator = "󱆃"
+fish_indicator = "󰈺"
+zsh_indicator = "󰬇"
+powershell_indicator = ""
+ion_indicator = ""
+elvish_indicator = "󰘧"
+tcsh_indicator = "󰬁"
+xonsh_indicator = ""
+cmd_indicator = ""
+nu_indicator = "󰅂"
+unknown_indicator = ""
+
 
 [cmd_duration]
 min_time = 3000
