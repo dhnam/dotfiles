@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "linux" }}
 #!/bin/sh
 set -e
 
@@ -50,3 +51,4 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 echo "Bootstrap script completed."
+{{- end }}

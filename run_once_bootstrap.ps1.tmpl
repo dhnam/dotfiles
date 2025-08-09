@@ -1,0 +1,67 @@
+{{- if eq .chezmoi.os "windows" }}
+# 관리자 권한 체크
+$currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $currentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
+    Write-Host "Please run this script as Administrator."
+    exit 1
+}
+
+# winget이 있는지 확인
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    Write-Host "winget이 설치되어 있지 않거나 경로에 없습니다. Microsoft Store에서 설치하거나 Windows 10 2004 이상인지 확인하세요."
+    exit 1
+}
+
+# starship 설치 (설치 안 되어 있으면)
+if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing starship prompt..."
+    winget install --id=Starship.Starship -e --accept-package-agreements --accept-source-agreements
+}
+
+# PowerShell 프로필에 starship 초기화 추가
+$profilePath = $PROFILE.CurrentUserAllHosts
+if (-not (Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath -Force | Out-Null
+}
+$starshipInitLine = 'Invoke-Expression (&starship init powershell)'
+$escapedPattern = [regex]::Escape($starshipInitLine)
+if (-not (Select-String -Path $profilePath -Pattern $escapedPattern -Quiet)) {
+    Add-Content -Path $profilePath -Value $starshipInitLine
+}
+
+# Neovim 설치 (설치 안 되어 있으면)
+if (-not (Get-Command nvim -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing Neovim..."
+    winget install --id=Neovim.Neovim -e --accept-package-agreements --accept-source-agreements
+}
+
+# vim-plug 설치 (Windows용 위치: $XDG_DATA_HOME 또는 $LOCALAPPDATA 기반)
+$plugPath = "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim"
+if (-not (Test-Path $plugPath)) {
+    Write-Host "Installing vim-plug..."
+    iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | `
+      ni $plugPath -Force
+}
+
+# Neovim 플러그인 자동 설치
+Write-Host "Installing Neovim plugins via vim-plug..."
+nvim --headless +PlugInstall +qall > $null 2>&1
+Write-Host "Neovim plugin installation completed."
+
+# PowerShell 프로필에 vi, vim alias 추가
+$profilePath = $PROFILE.CurrentUserAllHosts
+if (-not (Test-Path $profilePath)) {
+    New-Item -ItemType File -Path $profilePath -Force | Out-Null
+}
+$aliases = @(
+    "Set-Alias vi nvim",
+    "Set-Alias vim nvim"
+)
+foreach ($alias in $aliases) {
+    if (-not (Select-String -Path $profilePath -Pattern [regex]::Escape($alias) -Quiet)) {
+        Add-Content -Path $profilePath -Value $alias
+    }
+}
+
+Write-Host "Windows bootstrap completed."
+{{- end }}
