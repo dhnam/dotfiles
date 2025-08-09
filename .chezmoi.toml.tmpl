@@ -8,3 +8,12 @@
 [interpreters.ps1]
 	command = 'pwsh'
 	args = ["-NoLogo"]
+
+[cd]
+	{{- if eq .chezmoi.os "windows" }}
+	command = "pwsh"
+	{{- else if eq .chezmoi.os "linux" }}
+	command = "zsh"
+	{{- else }}
+	command = "bash"
+	{{- end }}
