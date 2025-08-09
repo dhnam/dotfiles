@@ -18,6 +18,27 @@ if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
     winget install --id=Starship.Starship -e --accept-package-agreements --accept-source-agreements
 }
 
+# cmd
+# clink 설치 (설치 안 되어 있으면)
+if (-not (Get-Command clink -ErrorAction SilentlyContinue)) {
+	Write-Host "Installing clink..."
+	winget install --id=chrisant996.Clink -e --accept-package-agreements --accept-source-agreements
+}
+
+$clinkDir = Join-Path $env:LocalAppData "clink"
+$starshipFile = Join-Path $clinkDir "starship.lua"
+
+# clink 디렉토리가 없으면 생성
+if (-not (Test-Path $clinkDir)) {
+    New-Item -ItemType Directory -Path $clinkDir -Force | Out-Null
+}
+
+# starship.lua 파일 생성
+$luaContent = "load(io.popen('starship init cmd'):read('*a'))()"
+Set-Content -Path $starshipFile -Value $luaContent -Encoding UTF8
+
+
+# Powershell
 # PowerShell 프로필에 starship 초기화 추가
 $profilePath = $PROFILE.CurrentUserAllHosts
 if (-not (Test-Path $profilePath)) {
