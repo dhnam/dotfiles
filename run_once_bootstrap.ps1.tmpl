@@ -58,7 +58,7 @@ if (-not (Test-Path $plugPath)) {
 
 # Neovim 플러그인 자동 설치
 Write-Host "Installing Neovim plugins via vim-plug..."
-& "C:\Program Files\Neovim\bin\nvim.exe" --headless +PlugInstall +qall
+& "C:\Program Files\Neovim\bin\nvim.exe" --headless +PlugInstall +qall *> $null 2>&1
 Write-Host "Neovim plugin installation completed."
 
 # PowerShell 프로필에 vi, vim alias 추가
