@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 	"file explorer
 	Plug 'nvim-tree/nvim-tree.lua'
 	"tagtree (F8)
