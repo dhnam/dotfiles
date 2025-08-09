@@ -38,6 +38,11 @@ if [ ! -d "$HOME/.pyenv" ]; then
   curl -fsSL https://pyenv.run | bash
 fi
 
+# vim-plug 초기화
+echo "Installing vim-plug plugins... (this may take a while)"
+nvim --headless +PlugInstall +qall >/dev/null 2>&1
+echo "vim-plug plugin installation completed."
+
 # zsh를 기본 쉘로 설정 (현재 쉘이 zsh가 아니면 변경)
 if [ "$SHELL" != "$(which zsh)" ]; then
   echo "Changing default shell to zsh..."
