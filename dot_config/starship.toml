@@ -26,7 +26,7 @@ $fill\
 ($python[╱ ](fg:color_fg bg:color_bg))\
 ($ruby[╱ ](fg:color_fg bg:color_bg))\
 ($rust[╱ ](fg:color_fg bg:color_bg))\
-($username$hostname[╱ ](fg:color_fg bg:color_bg))\
+($username$hostname[ ╱ ](fg:color_fg bg:color_bg))\
 $time\
 ([╱ ](fg:color_fg bg:color_bg)$battery)\
 [](fg:color_bg)
