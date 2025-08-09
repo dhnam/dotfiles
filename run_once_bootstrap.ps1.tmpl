@@ -35,6 +35,19 @@ if (-not (Get-Command nvim -ErrorAction SilentlyContinue)) {
     winget install --id=Neovim.Neovim -e --accept-package-agreements --accept-source-agreements
 }
 
+$source = Join-Path $HOME ".config\nvim\init.vim"
+$destinationDir = Join-Path $env:LOCALAPPDATA "nvim"
+$destination = Join-Path $destinationDir "init.vim"
+
+# 대상 디렉터리 없으면 생성
+if (-not (Test-Path $destinationDir)) {
+    New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
+}
+
+# 이동 또는 복사 (필요하면 Move-Item 대신 Copy-Item 사용)
+Move-Item -Path $source -Destination $destination -Force
+
+
 # vim-plug 설치 (Windows용 위치: $XDG_DATA_HOME 또는 $LOCALAPPDATA 기반)
 $plugPath = "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim"
 if (-not (Test-Path $plugPath)) {
@@ -58,7 +71,8 @@ $aliases = @(
     "Set-Alias vim nvim"
 )
 foreach ($alias in $aliases) {
-    if (-not (Select-String -Path $profilePath -Pattern [regex]::Escape($alias) -Quiet)) {
+    $nextEscape = [regex]::Escape($alias)
+    if (-not (Select-String -Path $profilePath -Pattern $nextEscape -Quiet)) {
         Add-Content -Path $profilePath -Value $alias
     }
 }
