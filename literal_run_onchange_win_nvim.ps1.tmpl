@@ -1,9 +1,0 @@
-$source = Join-Path $HOME ".config\nvim\init.vim"
-$destinationDir = Join-Path $env:LOCALAPPDATA "nvim"
-$destination = Join-Path $destinationDir "init.vim"
-
-if (-not (Test-Path $destinationDir)) {
-    New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
-}
-
-Move-Item -Path $source -Destination $destination -Force
