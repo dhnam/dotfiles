@@ -1,4 +1,4 @@
-{{ if eq .chezmoi.os "linux" }}
+{{- if eq .chezmoi.os "linux" -}}
 #!/bin/sh
 set -e
 
@@ -7,7 +7,7 @@ sudo apt update
 sudo apt install -y git curl zsh
 
 # Neovim 설치
-if ! command -v nvim >/dev/null 2>&1; then
+if ! command -v nvim >/dev/null 2 >&1; then
   curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
   chmod u+x nvim-linux-x86_64.appimage
   sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
@@ -51,4 +51,4 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 echo "Bootstrap script completed."
-{{- end }}
+{{- end -}}
