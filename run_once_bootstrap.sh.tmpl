@@ -11,11 +11,9 @@ if ! command -v nvim >/dev/null 2 >&1; then
   curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
   chmod u+x nvim-linux-x86_64.appimage
   sudo mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
-
-  # vi, vim 모두 nvim으로 심볼릭 링크 생성
-  sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vi
-  sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vim
 fi
+
+
 
 # oh-my-zsh 설치 (설치되어 있으면 스킵)
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -49,6 +47,9 @@ if [ "$SHELL" != "$(which zsh)" ]; then
   echo "Changing default shell to zsh..."
   chsh -s "$(which zsh)" || echo "Failed to change shell. Please change manually."
 fi
+# vi, vim 모두 nvim으로 심볼릭 링크 생성
+sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vi
+sudo ln -sf /usr/local/bin/nvim /usr/local/bin/vim
 
 echo "Bootstrap script completed."
 {{- end -}}
