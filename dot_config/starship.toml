@@ -31,7 +31,8 @@ $fill\
 ($username$hostname[ ╱ ](fg:color_fg bg:color_bg))\
 $time\
 ([╱ ](fg:color_fg bg:color_bg)$battery)\
-[](fg:color_bg)
+[](fg:color_bg)\
+$line_break\
 $character\
 """
 
@@ -71,7 +72,7 @@ style = 'fg:248 bg:color_bg'
 
 [status]
 disabled = false
-format = '[$symbol( $common_meaning)( $signal_name)( $signal_number)( $maybe_int) ]($style)'
+format = '[($common_meaning )($signal_name )($signal_number )($maybe_int )$symbol ]($style)'
 style = 'bold fg:160 bg:color_bg'
 success_style = 'bold fg:70 bg:color_bg'
 symbol = '✘'
@@ -114,7 +115,7 @@ repo_root_style = 'bold fg:39 bg:color_bg'
 read_only = "󰌾 "
 home_symbol = '~'
 truncate_to_repo = false
-fish_style_pwd_dir_length = 2
+fish_style_pwd_dir_length = 1
 
 [git_branch]
 format = '[$symbol$branch(:$remote_branch) ]($style)'
