@@ -6,6 +6,11 @@ set -e
 sudo apt update
 sudo apt install -y git curl zsh
 
+# uv/python 설치
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install --default
+uv tool install tldr
+
 # zsh 추가기능 설치
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
