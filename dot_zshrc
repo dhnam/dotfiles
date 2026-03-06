@@ -4,6 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+eval "$(~/.local/bin/mise activate zsh)"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -107,19 +108,28 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias ls="eza"
+alias tree="eza -T"
+alias find="fd"
+alias grep="rg"
+alias vim="nvim"
+alias vi="nvim"
+
+export SUDO_EDITOR="$(mise which nvim)"
+export FZF_DEFAULT_OPTS="
+    --preview-window=right:60%
+    --preview '
+        if [ -d {} ]; then
+            eza --tree --level=2 --color=always {}
+        else
+            bat --style=numbers --color=always --line-range :500 {}
+        fi
+    '
+"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/legendust/.sdkman"
-[[ -s "/home/legendust/.sdkman/bin/sdkman-init.sh" ]] && source "/home/legendust/.sdkman/bin/sdkman-init.sh"
-# Install Ruby Gems to ~/gems
-export GEM_HOME="$HOME/gems"
+source <(fzf --zsh)
+eval "$(zoxide init --cmd cd zsh)"
 
-# pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-# test
