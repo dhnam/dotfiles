@@ -112,8 +112,6 @@ alias ls="eza"
 alias tree="eza -T"
 alias find="fd"
 alias grep="rg"
-alias vim="nvim"
-alias vi="nvim"
 
 export SUDO_EDITOR="$(mise which nvim)"
 export FZF_DEFAULT_OPTS="
