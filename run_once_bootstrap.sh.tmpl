@@ -1,5 +1,5 @@
 {{- if eq .chezmoi.os "linux" -}}
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # 필수 패키지 설치
@@ -7,42 +7,47 @@ sudo apt update
 sudo apt install -y git curl zsh
 
 # uv/python 설치
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv python install --default
-uv tool install tldr
+if ! command -v uv &> /dev/null; then
+	echo "Installing uv..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
 
-# zsh 추가기능 설치
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+# 절대경로 이용
+$HOME/.local/bin/uv python install --default
+$HOME/.local/bin/uv tool install tldr
 
-if ! command -v mise &> /dev/null; then
+# starship 설치
+if ! command -v starship &> /dev/null; then
+	echo "Installing starship..."
+	curl -sS https://starship.rs/install.sh | sh
+fi
+
+# oh-my-zsh 설치
+if[ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installing oh-my-zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# zsh 플러그인 설치
+if[ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
+fi
+if[ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+fi
+
+# mise 설치
+if [ ! -f "$HOME/.local/bin/mise" ]; then
 	echo "Installing mise..."
 	curl https://mise.jdx.dev/install.sh | sh
 fi
 echo "Installing tools from mise config..."
-mise install -y
+$HOME/.local/bin/mise install -y
 
-
-# oh-my-zsh 설치 (설치되어 있으면 스킵)
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-fi
-
-# powerlevel10k 설치
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-fi
-
-# vim-plug 설치 (vim용)
-if [ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]; then
+# Neovim용 vim-plug 설치
+if[ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]; then
   curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# pyenv 설치 (설치되어 있으면 스킵)
-if [ ! -d "$HOME/.pyenv" ]; then
-  curl -fsSL https://pyenv.run | bash
 fi
 
 # vim-plug 초기화
@@ -50,12 +55,13 @@ echo "Installing vim-plug plugins... (this may take a while)"
 nvim --headless +PlugInstall +qall >/dev/null 2>&1
 echo "vim-plug plugin installation completed."
 
-# zsh를 기본 쉘로 설정 (현재 쉘이 zsh가 아니면 변경)
+# zsh 기본 셸로 설정
 if [ "$SHELL" != "$(which zsh)" ]; then
   echo "Changing default shell to zsh..."
   chsh -s "$(which zsh)" || echo "Failed to change shell. Please change manually."
 fi
-# vi, vim 모두 nvim으로 심볼릭 링크 생성
+
+# vi, vim 심볼릭 링크 생성
 sudo ln -sf $(which nvim) /usr/local/bin/vi
 sudo ln -sf $(which nvim) /usr/local/bin/vim
 

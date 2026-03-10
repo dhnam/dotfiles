@@ -12,34 +12,48 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
-# starship 설치 (설치 안 되어 있으면)
-if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing starship prompt..."
-    winget install --id=Starship.Starship -e --accept-package-agreements --accept-source-agreements
+# winget 패키지 설치 (starship, clink, neovim)
+$packages = @(
+    @{ id="Starship.Starship"; cmd="starship" },
+    @{ id="chrisant996.Clink"; cmd="clink" },
+)
+foreach ($pkg in $packages) {
+    if (-not (Get-Command $pkg.cmd -ErrorAction SilentlyContinue)) {
+        Write-Host "Installing $($pkg.id)..."
+        winget install --id=$pkg.id -e --accept-package-agreements --accept-source-agreements
+    }
 }
 
-# cmd
-# clink 설치 (설치 안 되어 있으면)
-if (-not (Get-Command clink -ErrorAction SilentlyContinue)) {
-	Write-Host "Installing clink..."
-	winget install --id=chrisant996.Clink -e --accept-package-agreements --accept-source-agreements
+# uv / python 설치
+if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+    Write-Host "Installing uv..."
+    Invoke-WebRequest -Uri https://astral.sh/uv/install.ps1 -OutFile uv-install.ps1
+    .\uv-install.ps1
+    Remove-Item uv-install.ps1
 }
+$env:PATH += ";$env:USERPROFILE\.local\bin" # 현재 세션 임시 적용
+Write-Host "Installing Python and tldr via uv..."
+uv python install --default
+uv tool install tldr
 
+# mise 설치 및 도구 설치
+if (-not (Get-Command mise -ErrorAction SilentlyContinue) -and -not (Test-Path "$env:USERPROFILE\.local\bin\mise.exe")) {
+    Write-Host "Installing mise..."
+    Invoke-WebRequest https://mise.jdx.dev/install.ps1 -UseBasicParsing | Invoke-Expression
+}
+Write-Host "Installing tools from mise config..."
+mise install -y
+
+# cmd (Clink + Starship) 설정
 $clinkDir = Join-Path $env:LocalAppData "clink"
 $starshipFile = Join-Path $clinkDir "starship.lua"
-
-# clink 디렉토리가 없으면 생성
 if (-not (Test-Path $clinkDir)) {
     New-Item -ItemType Directory -Path $clinkDir -Force | Out-Null
 }
-
-# starship.lua 파일 생성
 $luaContent = "load(io.popen('starship init cmd'):read('*a'))()"
 Set-Content -Path $starshipFile -Value $luaContent -Encoding UTF8
 
-
-# Powershell
-# PowerShell 프로필에 starship 초기화 추가
+# PowerShell (Starship) 설정
 $profilePath = $PROFILE.CurrentUserAllHosts
 if (-not (Test-Path $profilePath)) {
     New-Item -ItemType File -Path $profilePath -Force | Out-Null
@@ -50,26 +64,7 @@ if (-not (Select-String -Path $profilePath -Pattern $escapedPattern -Quiet)) {
     Add-Content -Path $profilePath -Value $starshipInitLine
 }
 
-# Neovim 설치 (설치 안 되어 있으면)
-if (-not (Get-Command nvim -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing Neovim..."
-    winget install --id=Neovim.Neovim -e --accept-package-agreements --accept-source-agreements
-}
-
-$source = Join-Path $HOME ".config\nvim\init.vim"
-$destinationDir = Join-Path $env:LOCALAPPDATA "nvim"
-$destination = Join-Path $destinationDir "init.vim"
-
-# 대상 디렉터리 없으면 생성
-if (-not (Test-Path $destinationDir)) {
-    New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
-}
-
-# 이동 또는 복사 (필요하면 Move-Item 대신 Copy-Item 사용)
-Move-Item -Path $source -Destination $destination -Force
-
-
-# vim-plug 설치 (Windows용 위치: $XDG_DATA_HOME 또는 $LOCALAPPDATA 기반)
+# vim-plug 설치
 $plugPath = "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim"
 if (-not (Test-Path $plugPath)) {
     Write-Host "Installing vim-plug..."
@@ -77,16 +72,14 @@ if (-not (Test-Path $plugPath)) {
       ni $plugPath -Force
 }
 
-# Neovim 플러그인 자동 설치
+# Neovim 플러그인 자동 설치 (설치 경로 확인 후 실행)
 Write-Host "Installing Neovim plugins via vim-plug..."
-& "C:\Program Files\Neovim\bin\nvim.exe" --headless +PlugInstall +qall *> $null 2>&1
+$nvimExe = "C:\Program Files\Neovim\bin\nvim.exe"
+if (-not (Test-Path $nvimExe)) { $nvimExe = "nvim" } # 환경변수 의존 Fallback
+& $nvimExe --headless +PlugInstall +qall *> $null 2>&1
 Write-Host "Neovim plugin installation completed."
 
 # PowerShell 프로필에 vi, vim alias 추가
-$profilePath = $PROFILE.CurrentUserAllHosts
-if (-not (Test-Path $profilePath)) {
-    New-Item -ItemType File -Path $profilePath -Force | Out-Null
-}
 $aliases = @(
     "Set-Alias vi nvim",
     "Set-Alias vim nvim"
@@ -98,5 +91,5 @@ foreach ($alias in $aliases) {
     }
 }
 
-Write-Host "Windows bootstrap completed."
+Write-Host "Windows bootstrap completed. Please restart your terminal!"
 {{- end }}

@@ -16,7 +16,6 @@ $fill\
 ($jobs[╱ ](fg:color_fg bg:color_bg))\
 ($direnv[╱ ](fg:color_fg bg:color_bg))\
 ($package[╱ ](fg:color_fg bg:color_bg))\
-($c[╱ ](fg:color_fg bg:color_bg))\
 ($cpp[╱ ](fg:color_fg bg:color_bg))\
 ($cmake[╱ ](fg:color_fg bg:color_bg))\
 ($conda[╱ ](fg:color_fg bg:color_bg))\
