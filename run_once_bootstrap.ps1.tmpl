@@ -13,6 +13,7 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 }
 
 # winget 패키지 설치 (starship, clink, mise)
+
 $packages = @(
     @{ id="Starship.Starship"; cmd="starship" }
     @{ id="chrisant996.Clink"; cmd="clink" }
@@ -25,6 +26,8 @@ foreach ($pkg in $packages) {
         winget install --id $pkg.id -e --accept-package-agreements --accept-source-agreements
     }
 }
+rustup toolchain install stable-x86_64-pc-windows-gnu
+rustup default stable-x86_64-pc-windows-gnu
 
 # uv / python 설치
 if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
