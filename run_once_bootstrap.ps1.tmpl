@@ -17,6 +17,7 @@ $packages = @(
     @{ id="Starship.Starship"; cmd="starship" }
     @{ id="chrisant996.Clink"; cmd="clink" }
     @{ id="jdx.mise"; cmd="mise" }
+    @{ id="Rustlang.Rustup"; cmd="rustup" }
 )
 foreach ($pkg in $packages) {
     if (-not (Get-Command $pkg.cmd -ErrorAction SilentlyContinue)) {
