@@ -14,8 +14,8 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 
 # winget 패키지 설치 (starship, clink, neovim)
 $packages = @(
-    @{ id="Starship.Starship"; cmd="starship" },
-    @{ id="chrisant996.Clink"; cmd="clink" },
+    @{ id="Starship.Starship"; cmd="starship" }
+    @{ id="chrisant996.Clink"; cmd="clink" }
 )
 foreach ($pkg in $packages) {
     if (-not (Get-Command $pkg.cmd -ErrorAction SilentlyContinue)) {
@@ -81,7 +81,7 @@ Write-Host "Neovim plugin installation completed."
 
 # PowerShell 프로필에 vi, vim alias 추가
 $aliases = @(
-    "Set-Alias vi nvim",
+    "Set-Alias vi nvim"
     "Set-Alias vim nvim"
 )
 foreach ($alias in $aliases) {
