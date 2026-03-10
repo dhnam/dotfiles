@@ -16,6 +16,7 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
 $packages = @(
     @{ id="Starship.Starship"; cmd="starship" }
     @{ id="chrisant996.Clink"; cmd="clink" }
+    @{ id="jdx.mise"; cmd="mise" }
 )
 foreach ($pkg in $packages) {
     if (-not (Get-Command $pkg.cmd -ErrorAction SilentlyContinue)) {
@@ -36,11 +37,6 @@ Write-Host "Installing Python and tldr via uv..."
 uv python install --default
 uv tool install tldr
 
-# mise 설치 및 도구 설치
-if (-not (Get-Command mise -ErrorAction SilentlyContinue) -and -not (Test-Path "$env:USERPROFILE\.local\bin\mise.exe")) {
-    Write-Host "Installing mise..."
-    Invoke-WebRequest https://mise.jdx.dev/install.ps1 -UseBasicParsing | Invoke-Expression
-}
 Write-Host "Installing tools from mise config..."
 mise install -y
 
