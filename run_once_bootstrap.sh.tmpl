@@ -23,16 +23,16 @@ if ! command -v starship &> /dev/null; then
 fi
 
 # oh-my-zsh 설치
-if[ ! -d "$HOME/.oh-my-zsh" ]; then
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing oh-my-zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
 # zsh 플러그인 설치
-if[ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
   git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
 fi
-if[ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
 fi
 
@@ -45,7 +45,7 @@ echo "Installing tools from mise config..."
 $HOME/.local/bin/mise install -y
 
 # Neovim용 vim-plug 설치
-if[ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]; then
+if [ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]; then
   curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
