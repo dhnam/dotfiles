@@ -64,9 +64,5 @@ if [ "$SHELL" != "$(which zsh)" ]; then
   chsh -s "$(which zsh)" || echo "Failed to change shell. Please change manually."
 fi
 
-# vi, vim 심볼릭 링크 생성
-sudo ln -sf $(which nvim) /usr/local/bin/vi
-sudo ln -sf $(which nvim) /usr/local/bin/vim
-
 echo "Bootstrap script completed."
 {{- end -}}
