@@ -21,5 +21,5 @@ Set-Alias vim nvim
 $env:FZF_DEFAULT_OPTS="--preview-window=right:60% --preview 'if (Test-Path -PathType Container {}) { eza --tree --level=2 --color=always {} } else { bat --style=numbers --color=always --line-range :500 {} }'"
 
 # zoxide 및 starship 초기화
-zoxide init --cmd cd powershell | Out-String | Invoke-Expression
 starship init powershell | Out-String | Invoke-Expression
+Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
