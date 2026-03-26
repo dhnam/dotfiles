@@ -48,9 +48,10 @@ call plug#begin()
 	"Fuzzy search
 	Plug 'nvim-lua/plenary.nvim'
 	Plug 'nvim-telescope/telescope.nvim', { 'frozen': 1, 'tag': '0.1.8' }
+	Plug 'ibhagwan/fzf-lua'
 
 	"Project
-	Plug 'ahmedkhalf/project.nvim'
+	Plug 'DrKJeff16/project.nvim'
 call plug#end()
 
     let g:clipboard = {

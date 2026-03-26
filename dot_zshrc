@@ -103,14 +103,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export SUDO_EDITOR="nvim"
-alias ls="eza"
-alias tree="eza -T"
+alias ls="eza --icons"
+alias tree="eza -T --icons"
 alias find="fd"
 alias grep="rg"
 alias vi="nvim"
 alias vim="nvim"
 
 export SUDO_EDITOR="$(mise which nvim)"
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS="
     --preview-window=right:60%
     --preview '
