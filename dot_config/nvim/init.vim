@@ -3,10 +3,6 @@ call plug#begin()
 	Plug 'nvim-tree/nvim-tree.lua'
 	"tagtree (F8)
 	Plug 'preservim/tagbar'
-	"treesitter - highlighter
-	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-	"Context viewer
-	Plug 'nvim-treesitter/nvim-treesitter-context'
 	"Icon for whichkey
 	Plug 'echasnovski/mini.icons'
 	"key preview
@@ -47,11 +43,17 @@ call plug#begin()
 
 	"Fuzzy search
 	Plug 'nvim-lua/plenary.nvim'
-	Plug 'nvim-telescope/telescope.nvim', { 'frozen': 1, 'tag': '0.1.8' }
+	Plug 'nvim-telescope/telescope.nvim'
 	Plug 'ibhagwan/fzf-lua'
 
 	"Project
 	Plug 'DrKJeff16/project.nvim'
+
+	"Drop-down navigation
+	Plug 'Bekaboo/dropbar.nvim'
+
+	"Treesitter manager
+	Plug 'romus204/tree-sitter-manager.nvim'
 call plug#end()
 
     let g:clipboard = {
@@ -67,7 +69,6 @@ call plug#end()
                 \   'cache_enabled': 0,
                 \ }
 let mapleader=" "
-source ~/.config/nvim/plug-config/treesitter.lua
 source ~/.config/nvim/plug-config/vscode.lua
 source ~/.config/nvim/plug-config/bufferline.lua
 source ~/.config/nvim/plug-config/lualine.lua
@@ -84,6 +85,8 @@ source ~/.config/nvim/plug-config/autopair.lua
 source ~/.config/nvim/plug-config/lspconfig.lua
 source ~/.config/nvim/plug-config/whichkey.lua
 source ~/.config/nvim/plug-config/scrollbar.lua
+source ~/.config/nvim/plug-config/tree-sitter-manager.lua
+
 
 set ts=4
 set shiftwidth=4
