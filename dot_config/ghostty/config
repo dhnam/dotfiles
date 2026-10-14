@@ -1,0 +1,27 @@
+# Ghostty 설정 (WSL이 아닌 Linux 전용, chezmoi 관리. Windows는 Windows Terminal을 쓴다)
+
+font-family = D2Coding Nerd Font
+font-size = 14
+# Windows Terminal의 줄 높이 1.2em에 맞춘 값 (D2Coding 기본은 1.16em)
+adjust-cell-height = 3%
+window-width = 120
+window-height = 32
+window-padding-x = 6
+window-padding-y = 4
+# Windows Terminal처럼 우클릭: 선택한 글자가 있으면 복사, 없으면 붙여넣기
+right-click-action = copy-or-paste
+
+# VS Code 기본 테마 (nvim 색 테마 vscode.nvim과 같은 계열)
+theme = Dark Modern
+# 배경만 반투명하게 하고, 흐림은 GNOME 확장 Blur my Shell이 맡는다 (1이 불투명)
+background-opacity = 0.8
+
+# Windows Terminal과 비슷한 단축키 (새 탭, 탭 닫기, Ctrl+Tab, 복사/붙여넣기는 Ghostty 기본값과 같다)
+keybind = alt+shift+equal=new_split:right
+keybind = alt+shift+minus=new_split:down
+keybind = alt+left=goto_split:left
+keybind = alt+right=goto_split:right
+keybind = alt+up=goto_split:up
+keybind = alt+down=goto_split:down
+keybind = ctrl+shift+f=start_search
+keybind = ctrl+shift+p=toggle_command_palette

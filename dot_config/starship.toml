@@ -264,7 +264,7 @@ symbol = "󱘗 "
 [battery]
 format = '[$symbol ]($style)'
 full_symbol = '[󰁹 $percentage](bold fg:70 bg:color_bg)'
-unknown_symbol = '[󰂑 ](bold fg:color_fg bg:color_bg)'
+unknown_symbol = '[󰂑 $percentage](bold fg:color_fg bg:color_bg)'
 empty_symbol = '[󰂎 $percentage](bold fg:160 bg:color_bg)'
 
 [[battery.display]]
