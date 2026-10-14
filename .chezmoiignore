@@ -2,3 +2,6 @@
 AppData
 .config/powershell
 {{- end }}
+{{- if or (ne .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+.config/wezterm
+{{- end }}

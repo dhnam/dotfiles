@@ -8,6 +8,10 @@ set -e
 if command -v apt-get &> /dev/null; then
   sudo apt-get update
   sudo apt-get install -y git curl zsh build-essential unzip universal-ctags cscope
+  # 베어메탈에서는 Neovim 시스템 클립보드용 도구가 필요하다 (WSL은 clip.exe를 쓴다)
+  if ! grep -qi microsoft /proc/sys/kernel/osrelease; then
+    sudo apt-get install -y wl-clipboard xclip
+  fi
 else
   missing=""
   for c in git curl zsh cc unzip; do
