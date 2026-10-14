@@ -31,6 +31,7 @@ $packages = @(
     @{ id = 'chrisant996.Clink';   test = { (Test-Cmd clink) -or (Test-Path "${env:ProgramFiles(x86)}\clink") } }  # clink는 PATH에 등록되지 않는다
     @{ id = 'Rustlang.Rustup';     test = { Test-Cmd rustup } }
     @{ id = 'Microsoft.Coreutils'; test = { Test-Path 'C:\Program Files\coreutils' } }
+    @{ id = 'BrechtSanders.WinLibs.POSIX.UCRT'; test = { Test-Cmd gcc } }  # nvim tree-sitter 파서 빌드용 C 컴파일러
 )
 foreach ($pkg in $packages) {
     if (-not (& $pkg.test)) {

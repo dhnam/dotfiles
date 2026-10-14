@@ -24,7 +24,7 @@ Open a new **PowerShell 7** (`pwsh`) terminal and run
 chezmoi init --apply dhnam
 ```
 
-The bootstrap script installs mise, clink, rustup and coreutils via winget, then everything else via mise. It asks for admin (UAC) once, to configure coreutils.
+The bootstrap script installs mise, clink, rustup, coreutils and gcc (WinLibs, for building tree-sitter parsers) via winget, then everything else via mise. It asks for admin (UAC) once, to configure coreutils.
 
 ## Linux
 
