@@ -56,6 +56,8 @@ call plug#begin()
 	Plug 'romus204/tree-sitter-manager.nvim'
 call plug#end()
 
+" WSL에서만 Windows 클립보드(clip.exe)를 쓴다. 그 외 환경은 Neovim 기본 감지에 맡긴다.
+if has('wsl')
     let g:clipboard = {
                 \   'name': 'WslClipboard',
                 \   'copy': {
@@ -68,6 +70,7 @@ call plug#end()
                 \   },
                 \   'cache_enabled': 0,
                 \ }
+endif
 let mapleader=" "
 source ~/.config/nvim/plug-config/vscode.lua
 source ~/.config/nvim/plug-config/bufferline.lua

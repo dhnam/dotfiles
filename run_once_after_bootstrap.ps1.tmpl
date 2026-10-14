@@ -1,0 +1,123 @@
+{{- if eq .chezmoi.os "windows" -}}
+# Windows 부트스트랩. 설정 파일이 모두 배포된 뒤(run_once_after_) 한 번 실행된다.
+# 전제: winget, git, PowerShell 7, chezmoi (README 참고). 관리자 권한은 필요 없고,
+# coreutils 설정을 바꿀 때만 UAC 창이 한 번 뜬다.
+#
+# 방침: CLI 도구는 mise(~/.config/mise/config.toml)로, mise로 못 까는 Windows 전용 프로그램만 winget으로.
+
+function Test-Cmd([string]$Name) { [bool](Get-Command $Name -ErrorAction Ignore) }
+
+# winget은 현재 세션의 PATH를 갱신하지 않으므로, 설치 후 레지스트리에서 다시 읽어 온다.
+function Update-SessionPath {
+    $env:Path = (@([Environment]::GetEnvironmentVariable('Path', 'Machine'), [Environment]::GetEnvironmentVariable('Path', 'User')) |
+        Where-Object { $_ }) -join ';'
+}
+
+function Add-UserPath([string]$Dir) {
+    $user = [Environment]::GetEnvironmentVariable('Path', 'User')
+    if (($user -split ';') -notcontains $Dir) {
+        [Environment]::SetEnvironmentVariable('Path', (($user.TrimEnd(';'), $Dir) -join ';'), 'User')
+    }
+}
+
+if (-not (Test-Cmd winget)) {
+    Write-Host "winget이 없습니다. Microsoft Store에서 '앱 설치 관리자'를 설치한 뒤 다시 실행하세요."
+    exit 1
+}
+
+# ---- winget: mise로 설치할 수 없는 것들
+$packages = @(
+    @{ id = 'jdx.mise';            test = { Test-Cmd mise } }
+    @{ id = 'chrisant996.Clink';   test = { (Test-Cmd clink) -or (Test-Path "${env:ProgramFiles(x86)}\clink") } }  # clink는 PATH에 등록되지 않는다
+    @{ id = 'Rustlang.Rustup';     test = { Test-Cmd rustup } }
+    @{ id = 'Microsoft.Coreutils'; test = { Test-Path 'C:\Program Files\coreutils' } }
+)
+foreach ($pkg in $packages) {
+    if (-not (& $pkg.test)) {
+        Write-Host "Installing $($pkg.id)..."
+        winget install --id $pkg.id -e --source winget --accept-package-agreements --accept-source-agreements
+    }
+}
+Update-SessionPath
+
+# ---- mise: CLI 도구 전부 (starship, uv, neovim, eza, fd, ...)
+if (-not (Test-Cmd mise)) {
+    Write-Host "mise를 찾을 수 없습니다. 터미널을 새로 연 뒤 'chezmoi apply'를 다시 실행하세요."
+    exit 1
+}
+# cmd(clink)처럼 'mise activate'를 거치지 않는 곳에서도 도구가 보이도록 shim 경로를 PATH에 넣는다.
+$shims = Join-Path $env:LOCALAPPDATA 'mise\shims'
+Add-UserPath $shims
+if (($env:Path -split ';') -notcontains $shims) { $env:Path = "$shims;$env:Path" }
+
+Write-Host "Installing tools from mise config..."
+mise install -y
+mise reshim
+
+# ---- uv: 기본 Python과 tldr
+Write-Host "Installing Python and tldr via uv..."
+mise exec -- uv python install --default
+mise exec -- uv tool install tldr
+mise exec -- uv tool update-shell   # ~/.local/bin을 PATH에 등록
+
+# ---- rust: x64에서는 MSVC 빌드 도구가 필요 없는 GNU 툴체인을 기본으로
+if (Test-Cmd rustup) {
+    if ($env:PROCESSOR_ARCHITECTURE -eq 'AMD64') {
+        rustup toolchain install stable-x86_64-pc-windows-gnu
+        rustup default stable-x86_64-pc-windows-gnu
+    }
+    else {
+        rustup toolchain install stable
+    }
+}
+
+# ---- PowerShell 모듈: Tab 완성(Invoke-FzfTabCompletion)에 필요
+if (-not (Get-Module -ListAvailable PSFzf)) {
+    Write-Host "Installing PSFzf..."
+    Install-Module PSFzf -Scope CurrentUser -Force
+}
+
+# ---- coreutils: ls/find/grep은 eza/fd/rg를 쓰므로 coreutils 쪽에서 끈다.
+# $PROFILE의 "DO NOT MODIFY -- coreutils" 블록은 손으로 고치지 않는다. 대신 coreutils가 공식으로
+# 읽는 DisabledUtilities 값을 설정하고 블록을 다시 생성시킨다. 이렇게 하면 coreutils가
+# 업데이트되어 블록이 재생성돼도 설정이 유지된다.
+$coreutilsDir = 'C:\Program Files\coreutils'
+$coreutilsInstall = Join-Path $coreutilsDir 'pwsh-install.ps1'
+if (Test-Path $coreutilsInstall) {
+    $disable = @('find', 'grep', 'ls')
+    $regPath = 'HKLM:\SOFTWARE\Microsoft\coreutils'
+    $current = @((Get-ItemProperty -LiteralPath $regPath -Name DisabledUtilities -ErrorAction Ignore).DisabledUtilities | Where-Object { $_ })
+    $blockPresent = (Test-Path -LiteralPath $PROFILE.CurrentUserCurrentHost) -and
+        (Select-String -LiteralPath $PROFILE.CurrentUserCurrentHost -Pattern '60b36fc6-2d59-49df-be51-28dd2f4c3c9a' -Quiet)
+    $regOk = (($current | Sort-Object) -join ',') -eq (($disable | Sort-Object) -join ',')
+    if (-not ($regOk -and $blockPresent)) {
+        $cmd = "New-Item -Path '$regPath' -Force | Out-Null; " +
+               "New-ItemProperty -LiteralPath '$regPath' -Name DisabledUtilities -PropertyType MultiString -Value @('$($disable -join "','")') -Force | Out-Null; " +
+               "& '$coreutilsInstall' -Action Install -Scope CurrentUser -CmdDir '$coreutilsDir\cmd'"
+        $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+        Write-Host "Configuring coreutils PowerShell integration (ls/find/grep 제외)..."
+        try {
+            if ($isAdmin) { pwsh -NoProfile -Command $cmd }
+            else { Start-Process pwsh -Verb RunAs -Wait -ArgumentList '-NoProfile', '-Command', $cmd }
+        }
+        catch {
+            Write-Host "coreutils 설정을 건너뜁니다(관리자 승인 필요): $($_.Exception.Message)"
+        }
+    }
+}
+
+# ---- Neovim: vim-plug과 플러그인
+$plugPath = "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim"
+if (-not (Test-Path $plugPath)) {
+    Write-Host "Installing vim-plug..."
+    iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | `
+      ni $plugPath -Force | Out-Null
+}
+Write-Host "Installing Neovim plugins via vim-plug..."
+mise exec -- nvim --headless +PlugInstall +qall *> $null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Neovim 플러그인 설치에 실패했습니다(exit $LASTEXITCODE). nvim을 열어 :PlugInstall을 직접 실행하세요."
+}
+
+Write-Host "Windows bootstrap completed. Please restart your terminal!"
+{{- end -}}

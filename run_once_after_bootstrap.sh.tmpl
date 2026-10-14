@@ -1,0 +1,69 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/bash
+# Linux 부트스트랩. 설정 파일이 모두 배포된 뒤(run_once_after_) 한 번 실행된다.
+# 방침: CLI 도구는 mise(~/.config/mise/config.toml)로, 시스템 패키지는 최소한만.
+set -e
+
+# 필수 시스템 패키지 (build-essential: tree-sitter 파서 빌드, unzip: Mason, ctags/cscope: tagbar와 gutentags)
+if command -v apt-get &> /dev/null; then
+  sudo apt-get update
+  sudo apt-get install -y git curl zsh build-essential unzip universal-ctags cscope
+else
+  missing=""
+  for c in git curl zsh cc unzip; do
+    command -v "$c" &> /dev/null || missing="$missing $c"
+  done
+  if [ -n "$missing" ]; then
+    echo "apt가 없는 배포판입니다. 다음을 직접 설치한 뒤 'chezmoi apply'를 다시 실행하세요:$missing"
+    exit 1
+  fi
+fi
+
+# oh-my-zsh 설치
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installing oh-my-zsh..."
+  export KEEP_ZSHRC=yes
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# zsh 플러그인 설치
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
+fi
+if [ ! -d "$HOME/.oh-my-zsh/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
+fi
+
+# mise 설치 후 CLI 도구 전부 설치 (starship, uv, neovim, eza, fd, ...)
+MISE="$HOME/.local/bin/mise"
+if [ ! -f "$MISE" ]; then
+  echo "Installing mise..."
+  curl https://mise.jdx.dev/install.sh | sh
+fi
+echo "Installing tools from mise config..."
+"$MISE" install -y
+
+# uv: 기본 Python과 tldr
+echo "Installing Python and tldr via uv..."
+"$MISE" exec -- uv python install --default
+"$MISE" exec -- uv tool install tldr || true
+
+# Neovim용 vim-plug 설치
+if [ ! -f "$HOME/.config/nvim/autoload/plug.vim" ]; then
+  curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
+echo "Installing vim-plug plugins... (this may take a while)"
+if ! "$MISE" exec -- nvim --headless +PlugInstall +qall > /dev/null 2>&1; then
+  echo "Neovim 플러그인 설치에 실패했습니다. nvim을 열어 :PlugInstall을 직접 실행하세요."
+fi
+
+# zsh 기본 셸로 설정
+if [ "$SHELL" != "$(which zsh)" ]; then
+  echo "Changing default shell to zsh..."
+  chsh -s "$(which zsh)" || echo "Failed to change shell. Please change manually."
+fi
+
+echo "Bootstrap script completed."
+{{- end -}}

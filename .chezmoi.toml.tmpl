@@ -7,7 +7,7 @@
 
 [interpreters.ps1]
 	command = 'pwsh'
-	args = ["-NoLogo"]
+	args = ["-NoLogo", "-NoProfile"]
 
 [cd]
 	{{- if eq .chezmoi.os "windows" }}

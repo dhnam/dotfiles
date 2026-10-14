@@ -1,22 +1,50 @@
 # Dotfiles
 
-My own dotfiles, for zsh (+oh-my-zsh +p10k combo) & nvim (w/ plugins)
+My own dotfiles for Windows (PowerShell 7 / cmd + clink) and Linux (zsh + oh-my-zsh), with starship and nvim (w/ plugins).
+
+Managed with `chezmoi`. CLI tools are installed with [`mise`](https://mise.jdx.dev) wherever possible (`~/.config/mise/config.toml`); only things mise can't install go through winget / apt.
 
 Note that some keybinds (telescope for example) is quite arbitary.
 
 Is subject to change.
 
-Managed with ~~`yadm`~~ `chezmoi`.
+# Setup
 
-# Prerequirement
+## Windows
 
-I didn't use bootstrap, so here's prerequirement (I believe those are all I need)
+Prerequirements: winget, and then
 
-zsh / oh-my-zsh / p10k / nvim / vim-plug / pyenv
+```powershell
+winget install Git.Git Microsoft.PowerShell twpayne.chezmoi
+```
 
-After install those, pull from this repo using `yadm pull`, and head to vi (neovim), execute `:PlugInstall` to install all of those plugins.
+Open a new **PowerShell 7** (`pwsh`) terminal and run
 
-After that, download some LSP in need using `:Mason`.
+```powershell
+chezmoi init --apply dhnam
+```
+
+The bootstrap script installs mise, clink, rustup and coreutils via winget, then everything else via mise. It asks for admin (UAC) once, to configure coreutils.
+
+## Linux
+
+```sh
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply dhnam
+```
+
+The bootstrap script assumes `apt` (Debian/Ubuntu). On other distros install `git curl zsh unzip` and a C compiler first.
+
+## After that
+
+Open nvim and download some LSP in need using `:Mason`.
+
+# About the PowerShell profile
+
+`$PROFILE` itself is **not** managed. PowerToys (CommandNotFound) and Microsoft coreutils write their own blocks into it, so managing the whole file means fighting them on every apply. Instead:
+
+- The shared profile lives in `~/.config/powershell/profile.ps1` (managed).
+- `run_after_pwsh-profile` makes sure `$PROFILE` has one line that loads it.
+- `ls` / `find` / `grep` are replaced with `eza` / `fd` / `rg`. Rather than editing the coreutils block by hand, the bootstrap sets coreutils' own `DisabledUtilities` registry value and regenerates the block, so the setting survives coreutils updates.
 
 # About .zshrc
 

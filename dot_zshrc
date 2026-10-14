@@ -102,7 +102,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export SUDO_EDITOR="nvim"
 alias ls="eza --icons"
 alias tree="eza -T --icons"
 alias find="fd"

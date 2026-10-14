@@ -1,6 +1,4 @@
-{{- if eq .chezmoi.os "linux" }}
-AppData_Local_nvim/
-{{- end }}
 {{- if ne .chezmoi.os "windows" }}
-Documents
+AppData
+.config/powershell
 {{- end }}

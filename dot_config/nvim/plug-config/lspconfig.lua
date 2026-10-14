@@ -1,6 +1,6 @@
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, {desc="Open diagnostic"})
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {desc="Goto prev diagnostic"})
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {desc="Goto next diagnostic"})
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end, {desc="Goto prev diagnostic"})
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end, {desc="Goto next diagnostic"})
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, {desc="Diagnostic location list"})
 
 -- Use LspAttach autocommand to only map the following keys
