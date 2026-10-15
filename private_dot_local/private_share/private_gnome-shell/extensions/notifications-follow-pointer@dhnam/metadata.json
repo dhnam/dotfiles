@@ -1,0 +1,7 @@
+{
+  "uuid": "notifications-follow-pointer@dhnam",
+  "name": "Notifications Follow Pointer",
+  "description": "Shows notification banners on the monitor the mouse pointer is on, instead of always on the primary monitor.",
+  "shell-version": ["50"],
+  "version": 1
+}

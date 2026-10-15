@@ -4,4 +4,8 @@ AppData
 {{- end }}
 {{- if or (ne .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 .config/ghostty
+.local/share/gnome-shell
 {{- end }}
+
+# run_onchange_after_dconf-load.sh가 읽는 원본이라 홈에는 배포하지 않는다
+dconf

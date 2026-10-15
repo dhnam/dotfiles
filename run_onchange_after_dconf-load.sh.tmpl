@@ -1,0 +1,8 @@
+{{- if and (eq .chezmoi.os "linux") (not (.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+#!/bin/sh
+# dconf/settings.ini의 GNOME 설정을 적용한다. 파일이 바뀌면 아래 해시가 바뀌어서 chezmoi가 다시 실행한다.
+# settings.ini hash: {{ include "dconf/settings.ini" | sha256sum }}
+set -e
+command -v dconf > /dev/null || exit 0
+dconf load / < {{ joinPath .chezmoi.sourceDir "dconf/settings.ini" | quote }}
+{{- end }}
