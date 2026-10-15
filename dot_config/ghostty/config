@@ -14,7 +14,7 @@ right-click-action = copy-or-paste
 # VS Code 기본 테마 (nvim 색 테마 vscode.nvim과 같은 계열)
 theme = Dark Modern
 # 배경만 반투명하게 하고, 흐림은 GNOME 확장 Blur my Shell이 맡는다 (1이 불투명)
-background-opacity = 0.8
+background-opacity = 0.9
 
 # Windows Terminal과 비슷한 단축키 (새 탭, 탭 닫기, Ctrl+Tab, 복사/붙여넣기는 Ghostty 기본값과 같다)
 keybind = alt+shift+equal=new_split:right
