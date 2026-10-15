@@ -13,7 +13,7 @@ fd -HI <pattern>
 fd -t d <pattern>
 
 # 찾은 파일마다 명령 실행
-fd -e <extension> -x <command> {}
+fd -e <extension> -x <command>
 
 # 최근 하루 안에 바뀐 파일 찾기
 fd --changed-within 1d

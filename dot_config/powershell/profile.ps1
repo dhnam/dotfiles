@@ -29,6 +29,54 @@ if (& $__has zoxide) {
     Invoke-Expression (& { (zoxide init --cmd cd powershell | Out-String) })
 }
 
+# Transient prompt. 명령을 입력한 프롬프트가 바로 전 프롬프트와 같은 디렉터리면 `❯` 한 줄로 줄이고,
+# 디렉터리가 바뀐 뒤 첫 프롬프트는 전체를 화면 기록에 남긴다 (zsh의 transient-prompt.zsh,
+# clink의 prompt.transient = same_dir과 같은 규칙). Ctrl+C로 취소한 줄도 같다.
+# starship의 Enable-TransientPrompt는 항상 줄이므로 쓰지 않고, 줄일 때만 starship 모듈의
+# TransientPrompt 플래그를 켜고 다시 그린다. 줄이지 않을 때는 다시 그리지 않으니 화면의 전체
+# 프롬프트는 starship이 원래 인자(직전 명령 상태, 실행 시간 등)로 그린 그대로 남는다.
+if (Get-Command Enable-TransientPrompt -ErrorAction Ignore) {
+    # starship init의 New-Module은 가져오기(import)가 안 되어 Get-Module로는 찾을 수 없다
+    $global:__transient = @{ Module = (Get-Command Enable-TransientPrompt).Module; PrevPwd = $null }
+    function global:Invoke-Starship-TransientFunction { "$([char]27)[1;38;5;76m❯$([char]27)[0m " }
+    function global:__transient_collapse {
+        $t = $global:__transient
+        if ($null -ne $t.PrevPwd -and $PWD.Path -eq $t.PrevPwd) {
+            & $t.Module { $script:TransientPrompt = $true }
+            [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
+        }
+        $t.PrevPwd = $PWD.Path
+    }
+    Set-PSReadLineKeyHandler -Key Enter -BriefDescription 'AcceptLine (transient prompt)' -ScriptBlock {
+        $errors = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$null, [ref]$null, [ref]$errors, [ref]$null)
+        # 괄호가 안 닫히는 등 입력이 이어지는 중이면 아직 줄이 끝난 게 아니다
+        if (-not ($errors | Where-Object IncompleteInput)) { __transient_collapse }
+        [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
+    }
+    Set-PSReadLineKeyHandler -Chord Ctrl+c -BriefDescription 'CopyOrCancelLine (transient prompt)' -ScriptBlock {
+        $start = $length = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetSelectionState([ref]$start, [ref]$length)
+        if ($length -le 0) { __transient_collapse }  # 선택 영역이 있으면 복사만 한다
+        [Microsoft.PowerShell.PSConsoleReadLine]::CopyOrCancelLine()
+    }
+}
+
+# navi: Ctrl+G로 명령어 모음(~/.config/navi/cheats)을 검색해서 입력 칸에 넣는다.
+# 입력 중인 글자가 있으면 검색어로 쓴다. `navi widget power-shell`은 위젯이 아니라 모듈을 복사하고
+# $PROFILE에 줄을 덧붙이는 설치 스크립트라서 쓰지 않고 직접 만든다.
+if (& $__has navi) {
+    $env:NAVI_PATH = "$HOME\.config\navi\cheats"
+    Set-PSReadLineKeyHandler -Chord Ctrl+g -BriefDescription 'navi 명령어 모음 검색' -ScriptBlock {
+        $line = $null
+        [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$null)
+        $naviArgs = @('--print')
+        if ($line) { $naviArgs += '--query', $line }
+        $out = (navi @naviArgs | Out-String).Trim()
+        if ($out) { [Microsoft.PowerShell.PSConsoleReadLine]::Replace(0, $line.Length, $out) }
+    }
+}
+
 # 명령 대체. ls/find/grep은 coreutils 통합에서 꺼 두었기 때문에(부트스트랩의 DisabledUtilities)
 # 여기 함수가 그대로 쓰인다.
 if (& $__has eza) {
