@@ -1,0 +1,7 @@
+{
+  "uuid": "secondary-monitor-clock@dhnam",
+  "name": "Secondary Monitor Clock",
+  "description": "Shows a small clock (time and date) in the bottom-right corner of every non-primary monitor, like the Windows taskbar clock.",
+  "shell-version": ["50"],
+  "version": 1
+}

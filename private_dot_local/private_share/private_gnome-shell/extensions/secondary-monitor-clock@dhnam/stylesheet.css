@@ -1,0 +1,16 @@
+.secondary-monitor-clock {
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 10px;
+  padding: 3px 10px;
+}
+
+.secondary-monitor-clock-time {
+  color: #ffffff;
+  font-size: 10.5pt;
+  font-weight: bold;
+}
+
+.secondary-monitor-clock-date {
+  color: #d0d0d0;
+  font-size: 9pt;
+}
