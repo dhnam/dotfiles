@@ -1,0 +1,127 @@
+% fd, 파일 찾기
+
+# 이름에 글자가 들어간 파일 찾기
+fd <pattern>
+
+# 확장자로 파일 찾기
+fd -e <extension>
+
+# 숨김 파일과 .gitignore 대상까지 포함해서 찾기
+fd -HI <pattern>
+
+# 폴더만 찾기
+fd -t d <pattern>
+
+# 찾은 파일마다 명령 실행
+fd -e <extension> -x <command> {}
+
+# 최근 하루 안에 바뀐 파일 찾기
+fd --changed-within 1d
+
+% rg, 파일 내용 검색
+
+# 파일 내용에서 글자 검색
+rg <pattern>
+
+# 대소문자 무시하고 검색
+rg -i <pattern>
+
+# 특정 확장자 파일에서만 검색
+rg -t <type> <pattern>
+
+# 검색어가 든 파일 이름만 보기
+rg -l <pattern>
+
+# 앞뒤 3줄씩 같이 보기
+rg -C 3 <pattern>
+
+# 정규식 대신 글자 그대로 검색
+rg -F <text>
+
+% fzf, 퍼지 검색
+
+# 고른 파일을 nvim으로 열기
+nvim $(fzf)
+
+# 명령 출력에서 한 줄 고르기
+<command> | fzf
+
+% bat, eza, 파일 보기
+
+# 문법 강조해서 파일 보기
+bat <file>
+
+# 줄 번호와 장식 없이 보기
+bat -p <file>
+
+# 상세 목록과 git 상태 보기
+ls -l --git
+
+# 폴더 구조를 2단계까지 보기
+tree -L 2
+
+% zoxide, 폴더 이동
+
+# 자주 간 폴더로 이름 일부만 써서 이동
+cd <part-of-name>
+
+# 자주 간 폴더 목록에서 골라 이동
+cdi
+
+% mise, 도구 관리
+
+# 설치된 도구와 버전 보기
+mise ls
+
+# 새 도구를 전역으로 설치하고 설정에 추가
+mise use -g <tool>@latest
+
+# 오래된 도구 확인하고 올리기
+mise outdated && mise upgrade
+
+# 현재 폴더 프로젝트에 도구 버전 고정
+mise use <tool>@<version>
+
+% chezmoi, dotfiles
+
+# 관리 중인 설정 파일 편집 (저장하면 자동 커밋, push)
+chezmoi edit <file>
+
+# 저장소와 실제 파일의 차이 보기
+chezmoi diff
+
+# 원격 저장소 변경을 받아 적용
+chezmoi update
+
+# 새 설정 파일을 관리 대상에 추가 (자동 커밋, push)
+chezmoi add <file>
+
+% gh, GitHub
+
+# 현재 저장소의 PR 목록
+gh pr list
+
+# PR 브랜치 받아 오기
+gh pr checkout <number>
+
+# 저장소를 브라우저로 열기
+gh browse
+
+% uv, Python
+
+# 가상환경 만들기
+uv venv
+
+# 패키지 추가 (pyproject.toml에 기록)
+uv add <package>
+
+# 프로젝트 환경에서 스크립트 실행
+uv run <script>
+
+# CLI 도구를 격리 설치
+uv tool install <tool>
+
+% tldr, 도움말
+
+# 명령어 사용 예시 보기
+tldr <command>

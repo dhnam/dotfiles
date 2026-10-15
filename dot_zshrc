@@ -133,3 +133,8 @@ source <(fzf --zsh)
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 
+# navi: Ctrl+G로 명령어 모음 검색. 같은 모음에서 빈 입력 칸에 옅은 팁을 보여 준다
+export NAVI_PATH="$HOME/.config/navi/cheats"
+eval "$(navi widget zsh)"
+source ~/.config/zsh/tips.zsh
+
