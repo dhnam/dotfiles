@@ -50,6 +50,8 @@ _tip_clear() {
     region_highlight=("${(@)region_highlight:#* memo=tip}")
     zle -R
   fi
+  # 이 뒤에 다시 그려질 때(transient prompt 등) 팁을 또 넣지 않게 한다
+  _tip_current=
 }
 
 autoload -Uz add-zle-hook-widget
@@ -57,9 +59,15 @@ add-zle-hook-widget line-init _tip_line_init
 add-zle-hook-widget line-pre-redraw _tip_apply
 add-zle-hook-widget line-finish _tip_clear
 
-# Ctrl+C로 줄을 취소하면 line-finish가 불리지 않으므로 여기서도 지운다
+# Ctrl+C로 줄을 취소하면 line-finish가 불리지 않으므로 여기서도 지운다.
+# Ctrl+C 때 부를 위젯은 _zle_abort_widgets에 모은다 (transient-prompt.zsh도 같이 쓴다)
 zle -N _tip_clear
-TRAPINT() {
-  zle && zle _tip_clear
+typeset -ga _zle_abort_widgets
+_zle_abort_widgets+=(_tip_clear)
+(( $+functions[TRAPINT] )) || TRAPINT() {
+  local widget
+  if zle; then
+    for widget in $_zle_abort_widgets; do zle $widget; done
+  fi
   return $(( 128 + $1 ))
 }

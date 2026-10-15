@@ -138,3 +138,6 @@ export NAVI_PATH="$HOME/.config/navi/cheats"
 eval "$(navi widget zsh)"
 source ~/.config/zsh/tips.zsh
 
+# 같은 디렉터리에서 이어진 명령의 프롬프트는 `❯`로 줄인다
+source ~/.config/zsh/transient-prompt.zsh
+
