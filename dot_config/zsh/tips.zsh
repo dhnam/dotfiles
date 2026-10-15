@@ -1,14 +1,9 @@
 # 입력 칸이 비어 있을 때 옅은 글씨로 도구 팁 하나를 보여 준다.
-# 팁은 navi 명령어 모음($NAVI_PATH/*.cheat)의 "# 설명" + 명령 쌍과 아래 단축키 목록에서 고른다.
+# 팁은 navi 명령어 모음($NAVI_PATH/*.cheat)의 "# 설명" + 명령 쌍에서 고른다.
+# 단축키(keys.cheat)는 `: 키` 형태라서 `: `를 떼고 보여 준다.
 # 화면에만 그리는 글자(POSTDISPLAY)라서 실행되지 않고, 오른쪽 화살표 등으로도 입력 칸에 들어오지 않는다.
 
-typeset -ga _tip_list=(
-  'Ctrl+T  # fzf: 파일을 골라 경로를 입력 칸에 넣기'
-  'Ctrl+R  # fzf: 명령 기록 검색'
-  'Alt+C  # fzf: 하위 폴더를 골라 이동'
-  'Ctrl+G  # navi: 명령어 모음 검색해서 입력 칸에 넣기'
-  'Win+V  # 클립보드 기록'
-)
+typeset -ga _tip_list=()
 
 () {
   local file line desc
@@ -19,7 +14,7 @@ typeset -ga _tip_list=(
         ('# '*) desc=${line#\# } ;;
         ('') ;;
         ('%'*|'$'*|';'*) desc= ;;
-        (*) [[ -n $desc ]] && _tip_list+=("$line  # $desc"); desc= ;;
+        (*) [[ -n $desc ]] && _tip_list+=("${line#: }  # $desc"); desc= ;;
       esac
     done < $file
   done
