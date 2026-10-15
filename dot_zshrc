@@ -72,7 +72,8 @@ export PATH="$PATH:/snap/bin"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+# zsh-syntax-highlighting은 마지막에 불러와야 한다
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,12 +103,16 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ls="eza --icons"
-alias tree="eza -T --icons"
+alias ls="eza --icons=auto"
+alias tree="eza -T --icons=auto"
 alias find="fd"
 alias grep="rg"
 alias vi="nvim"
 alias vim="nvim"
+
+# oh-my-zsh 기본값(SAVEHIST 10000)은 기록이 길면 오래된 것부터 잘라낸다
+HISTSIZE=100000
+SAVEHIST=100000
 
 export SUDO_EDITOR="$(mise which nvim)"
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
