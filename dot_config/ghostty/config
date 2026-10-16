@@ -11,6 +11,10 @@ window-padding-y = 4
 # Windows Terminal처럼 우클릭: 선택한 글자가 있으면 복사, 없으면 붙여넣기
 right-click-action = copy-or-paste
 
+# 새 탭은 홈(~)에서 시작한다. 분할 창은 지금 폴더를 그대로 이어받는다
+working-directory = home
+tab-inherit-working-directory = false
+
 # VS Code 기본 테마 (nvim 색 테마 vscode.nvim과 같은 계열)
 theme = Dark Modern
 # 배경만 반투명하게 하고, 흐림은 GNOME 확장 Blur my Shell이 맡는다 (1이 불투명)
