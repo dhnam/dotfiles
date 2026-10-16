@@ -89,6 +89,7 @@ vimcmd_visual_symbol = '[V](bold fg:76)'
 
 [time]
 disabled = false
+time_format = '%H:%M'
 format = '[$time  ]($style)'
 style = 'fg:66 bg:color_bg'
 
@@ -241,6 +242,7 @@ Void = " "
 Windows = "󰍲 "
 
 [package]
+disabled = true
 format = '[$symbol$version ]($style)'
 style = 'bold fg:200 bg:color_bg'
 symbol = "󰏗 "
