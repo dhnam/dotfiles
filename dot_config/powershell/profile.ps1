@@ -67,6 +67,8 @@ if (Get-Command Enable-TransientPrompt -ErrorAction Ignore) {
 # $PROFILE에 줄을 덧붙이는 설치 스크립트라서 쓰지 않고 직접 만든다.
 if (& $__has navi) {
     $env:NAVI_PATH = "$HOME\.config\navi\cheats"
+    # keys.cheat의 `: 키` 줄을 실행해도 괜찮도록 sh의 `:`처럼 아무것도 하지 않는 명령
+    function global:: { }
     Set-PSReadLineKeyHandler -Chord Ctrl+g -BriefDescription 'navi 명령어 모음 검색' -ScriptBlock {
         $line = $null
         [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$null)

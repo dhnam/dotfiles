@@ -1,0 +1,5 @@
+# Windows용 navi 설정 (Linux는 기본값을 쓴다).
+# 기본 셸이 bash라서 fzf 미리보기가 "bash not found"로 실패한다. navi 예시 설정대로 cmd.exe를 쓴다.
+shell:
+  command: cmd.exe
+  finder_command: cmd.exe
