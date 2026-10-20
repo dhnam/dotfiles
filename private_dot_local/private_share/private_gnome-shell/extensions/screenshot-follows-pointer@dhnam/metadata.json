@@ -1,0 +1,7 @@
+{
+  "uuid": "screenshot-follows-pointer@dhnam",
+  "name": "Screenshot Follows Pointer",
+  "description": "Shows the screenshot UI panel on the monitor the mouse pointer is on, and moves the screen selection and the area box to that monitor.",
+  "shell-version": ["50"],
+  "version": 1
+}
