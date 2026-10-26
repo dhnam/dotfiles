@@ -61,8 +61,9 @@ export default class SecondaryMonitorClock extends Extension {
             });
             box.add_child(time);
             box.add_child(date);
-            // reactive가 아니므로 클릭은 아래로 통과한다. 그 모니터가 전체 화면이면 숨긴다
-            layout.addChrome(box, {trackFullscreen: true});
+            // reactive가 아니므로 클릭은 아래로 통과한다. 그 모니터가 전체 화면이면 숨긴다.
+            // 독의 패널 모드(화면 폭 전체)에서도 가리지 않도록 독보다 위층(top chrome)에 둔다
+            layout.addTopChrome(box, {trackFullscreen: true});
 
             const clock = {box, time, date, monitorIndex: monitor.index};
             box.connectObject(
