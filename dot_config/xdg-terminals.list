@@ -1,0 +1,3 @@
+# xdg-terminal-exec 기본 터미널 (Nautilus "터미널에서 열기" 등). ghostty-new-window.desktop 주석 참고
+ghostty-new-window.desktop
+com.mitchellh.ghostty.desktop

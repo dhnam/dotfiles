@@ -1,0 +1,14 @@
+# xdg-terminal-exec(Nautilus "터미널에서 열기" 등)가 부르는 Ghostty 항목.
+# 기본 항목은 --gtk-single-instance=true로 떠서, Ghostty가 이미 떠 있으면 --working-directory가 무시되고
+# 포커스된 창의 폴더를 물려받는다. +new-window는 떠 있는 Ghostty에 폴더/명령을 넘겨 새 창을 연다 (없으면 D-Bus로 띄운다).
+[Desktop Entry]
+Type=Application
+Name=Ghostty (새 창)
+Icon=com.mitchellh.ghostty
+Exec=/usr/bin/ghostty +new-window
+NoDisplay=true
+Terminal=false
+Categories=System;TerminalEmulator;
+X-TerminalArgExec=-e
+X-TerminalArgTitle=--title=
+X-TerminalArgDir=--working-directory=

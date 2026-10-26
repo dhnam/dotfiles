@@ -4,6 +4,8 @@ AppData
 {{- end }}
 {{- if or (ne .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 .config/ghostty
+.config/xdg-terminals.list
+.local/share/applications/ghostty-new-window.desktop
 .local/share/gnome-shell
 {{- end }}
 
