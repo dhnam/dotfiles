@@ -1,5 +1,6 @@
 [tools]
 bat = "latest"
+bitwarden-secrets-manager = "latest"
 eza = "latest"
 fd = "latest"
 fzf = "latest"
