@@ -114,6 +114,10 @@ alias vim="nvim"
 HISTSIZE=100000
 SAVEHIST=100000
 
+# 한국어 로케일이면 Go TUI(k9s, lazygit 등)가 ─ │ 같은 "애매한 폭" 글자를 2칸으로 계산해 화면이 깨진다.
+# 터미널(Ghostty)은 1칸으로 그리므로 맞춘다 (go-runewidth가 읽는 변수)
+export RUNEWIDTH_EASTASIAN=0
+
 export SUDO_EDITOR="$(mise which nvim)"
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 export FZF_DEFAULT_OPTS="
@@ -130,6 +134,8 @@ export FZF_DEFAULT_OPTS="
 [[ -r ~/.secrets.zsh ]] && source ~/.secrets.zsh
 # bws 토큰은 GNOME 키링에 두고 실행할 때만 넘긴다 (저장: secret-tool store --label=... service bws account default)
 bws() { BWS_ACCESS_TOKEN="$(secret-tool lookup service bws account default)" command bws "$@"; }
+# work 머신 계정 (저장: secret-tool store --label='bws work' service bws account work)
+bws-work() { BWS_ACCESS_TOKEN="$(secret-tool lookup service bws account work)" command bws "$@"; }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
