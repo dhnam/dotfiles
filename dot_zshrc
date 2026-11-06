@@ -128,6 +128,8 @@ export FZF_DEFAULT_OPTS="
 "
 
 [[ -r ~/.secrets.zsh ]] && source ~/.secrets.zsh
+# bws 토큰은 GNOME 키링에 두고 실행할 때만 넘긴다 (저장: secret-tool store --label=... service bws account default)
+bws() { BWS_ACCESS_TOKEN="$(secret-tool lookup service bws account default)" command bws "$@"; }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
