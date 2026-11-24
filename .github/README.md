@@ -44,7 +44,7 @@ Open nvim and download some LSP in need using `:Mason`.
 
 - The shared profile lives in `~/.config/powershell/profile.ps1` (managed).
 - `run_after_pwsh-profile` makes sure `$PROFILE` has one line that loads it.
-- `ls` / `find` / `grep` are replaced with `eza` / `fd` / `rg`. Rather than editing the coreutils block by hand, the bootstrap sets coreutils' own `DisabledUtilities` registry value and regenerates the block, so the setting survives coreutils updates.
+- `ls` is replaced with `eza`. `grep` / `find` stay as the real tools (use `rg` / `fd` by name), since agents expect their original syntax. Rather than editing the coreutils block by hand, the bootstrap sets coreutils' own `DisabledUtilities` registry value and regenerates the block, so the setting survives coreutils updates.
 
 # About .zshrc
 

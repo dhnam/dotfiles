@@ -78,14 +78,14 @@ if (-not (Get-Module -ListAvailable PSFzf)) {
     Install-Module PSFzf -Scope CurrentUser -Force
 }
 
-# ---- coreutils: ls/find/grep은 eza/fd/rg를 쓰므로 coreutils 쪽에서 끈다.
+# ---- coreutils: ls는 eza를 쓰므로 coreutils 쪽에서 끈다. grep/find는 coreutils 것을 그대로 쓴다.
 # $PROFILE의 "DO NOT MODIFY -- coreutils" 블록은 손으로 고치지 않는다. 대신 coreutils가 공식으로
 # 읽는 DisabledUtilities 값을 설정하고 블록을 다시 생성시킨다. 이렇게 하면 coreutils가
 # 업데이트되어 블록이 재생성돼도 설정이 유지된다.
 $coreutilsDir = 'C:\Program Files\coreutils'
 $coreutilsInstall = Join-Path $coreutilsDir 'pwsh-install.ps1'
 if (Test-Path $coreutilsInstall) {
-    $disable = @('find', 'grep', 'ls')
+    $disable = @('ls')
     $regPath = 'HKLM:\SOFTWARE\Microsoft\coreutils'
     $current = @((Get-ItemProperty -LiteralPath $regPath -Name DisabledUtilities -ErrorAction Ignore).DisabledUtilities | Where-Object { $_ })
     $blockPresent = (Test-Path -LiteralPath $PROFILE.CurrentUserCurrentHost) -and
@@ -96,7 +96,7 @@ if (Test-Path $coreutilsInstall) {
                "New-ItemProperty -LiteralPath '$regPath' -Name DisabledUtilities -PropertyType MultiString -Value @('$($disable -join "','")') -Force | Out-Null; " +
                "& '$coreutilsInstall' -Action Install -Scope CurrentUser -CmdDir '$coreutilsDir\cmd'"
         $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-        Write-Host "Configuring coreutils PowerShell integration (ls/find/grep 제외)..."
+        Write-Host "Configuring coreutils PowerShell integration (ls 제외)..."
         try {
             if ($isAdmin) { pwsh -NoProfile -Command $cmd }
             else { Start-Process pwsh -Verb RunAs -Wait -ArgumentList '-NoProfile', '-Command', $cmd }

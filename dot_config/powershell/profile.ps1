@@ -79,19 +79,13 @@ if (& $__has navi) {
     }
 }
 
-# 명령 대체. ls/find/grep은 coreutils 통합에서 꺼 두었기 때문에(부트스트랩의 DisabledUtilities)
-# 여기 함수가 그대로 쓰인다.
+# 명령 대체. ls는 coreutils 통합에서 꺼 두었기 때문에(부트스트랩의 DisabledUtilities)
+# 여기 함수가 그대로 쓰인다. grep/find는 rg/fd로 바꾸지 않는다(에이전트가 원래 문법을 그대로 쓰므로).
 if (& $__has eza) {
     Remove-Item Alias:ls -ErrorAction SilentlyContinue
     function global:ls { eza --icons @args }
     function global:la { eza --icons -la @args }
     function global:tree { eza --tree --icons @args }
-}
-if (& $__has fd) {
-    function global:find { fd @args }
-}
-if (& $__has rg) {
-    function global:grep { rg @args }
 }
 if (& $__has nvim) {
     function global:vi { nvim @args }

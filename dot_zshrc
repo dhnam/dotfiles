@@ -103,10 +103,12 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ls="eza --icons=auto"
-alias tree="eza -T --icons=auto"
-alias find="fd"
-alias grep="rg"
+# eza는 ls와 옵션이 달라서(-t, -h, -l 칸 순서 등) 에이전트가 쓰는 ls 명령이 깨진다.
+# Claude Code가 띄운 셸(CLAUDECODE=1)에서는 원래 ls/tree를 쓰게 둔다.
+if [[ -z $CLAUDECODE ]]; then
+  alias ls="eza --icons=auto"
+  alias tree="eza -T --icons=auto"
+fi
 alias vi="nvim"
 alias vim="nvim"
 

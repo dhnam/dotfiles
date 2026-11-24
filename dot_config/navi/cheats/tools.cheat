@@ -55,10 +55,10 @@ bat <file>
 bat -p <file>
 
 # 상세 목록과 git 상태 보기
-ls -l --git
+eza -l --git
 
 # 폴더 구조를 2단계까지 보기
-tree -L 2
+eza -T -L 2
 
 % zoxide, 폴더 이동
 
