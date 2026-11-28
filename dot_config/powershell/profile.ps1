@@ -16,8 +16,14 @@ if (& $__has mise) {
 if (& $__has fzf) {
     $env:FZF_DEFAULT_COMMAND = 'fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
     $env:FZF_DEFAULT_OPTS = "--preview-window=right:60% --preview 'dir /a:d {} >nul 2>&1 && eza --tree --level=2 --color=always {} || bat --style=numbers --color=always --line-range :500 {}'"
-    if (& $__has Invoke-FzfTabCompletion) {
-        Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
+    # PSFzf는 불러오는 데 0.8초 넘게 걸려서 시작할 때 가져오지 않고, 처음 Tab을 누를 때 가져온다.
+    # Get-Command Invoke-FzfTabCompletion으로 확인하면 그 자리에서 모듈을 자동으로 불러오므로,
+    # 설치 여부는 모듈 폴더가 있는지만 본다.
+    if ($env:PSModulePath -split ';' | Where-Object { $_ -and (Test-Path -LiteralPath "$_\PSFzf") }) {
+        Set-PSReadLineKeyHandler -Key Tab -BriefDescription 'fzf 탭 완성 (PSFzf, 처음 누를 때 로드)' -ScriptBlock {
+            if (-not (Get-Module PSFzf)) { Import-Module PSFzf -Global }
+            Invoke-FzfTabCompletion
+        }
     }
 }
 
